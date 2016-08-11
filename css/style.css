@@ -1,0 +1,136 @@
+h1 {
+    text-align: center;
+    font-family: Optima,Segoe,Segoe UI,Candara,Calibri,Arial,sans-serif;
+    font-size: 48px;
+}
+
+header{
+    background-color: #16BAC5;
+    font-family: Optima,Segoe,Segoe UI,Candara,Calibri,Arial,sans-serif;
+    font-size: 20px;
+    color: white;
+    height: 34px;
+    width: 100%;
+}
+
+#minititle {
+    width: 20%;
+    float: left;
+}
+
+#datasourcebutton {
+    width: 20%;
+    float:right;
+}
+
+
+
+
+body{
+    background-color: white;
+    font-family: Optima,Segoe,Segoe UI,Candara,Calibri,Arial,sans-serif;
+}
+
+
+#histholder, #tsholder, #bpndholder, #bpclsholder, #pdfholder {
+    height: 400px;
+    width: 48.7%;
+    float: left;
+    margin: 30px 5px 30px 5px;
+    background-color: white;
+}
+
+#plotoptions{
+    text-align: center;
+    background-color: #FFF3D1;
+    float: center;
+    width: 100%;
+    border-radius: 5px;
+    border-bottom: solid;
+    border-color: #FFBE00;
+    border-width: 2px;
+}
+
+@media (max-width: 1000px) {
+    #histholder, #tsholder, #bpndholder, #bpclsholder, #pdfholder {
+        width: 100%;
+        float: left;
+        margin: 30px 5px 30px 5px;
+    }
+}
+
+#timeseries, #histogram, #boxplotsnd, #boxplotscls, #pdf {
+    float: left;
+    height: 400px;
+    width: 100%;
+}
+
+input[type=range]{
+    width: 20%;
+}
+
+.form-control{
+    width: 35%;
+    margin-left: 32.5%;
+    margin-right: 32.5%;
+}
+
+#dataselect-formcontrol{
+    margin: 0px 0px 0px 0px;
+}
+
+#dataselect-formcontrol-group {
+    margin: 0px 0px 0px 0px;
+}
+
+
+
+
+
+/*Custom button for Plot Titles*/
+
+.btn-graphtitle { 
+  color: #000000; 
+  background-color: #FFBE00; 
+  border-color: #FFCB33; 
+} 
+ 
+.btn-graphtitle:hover, 
+.btn-graphtitle:focus, 
+.btn-graphtitle:active, 
+.btn-graphtitle.active, 
+.open .dropdown-toggle.btn-graphtitle { 
+  color: #000000; 
+  background-color: #FFE599; 
+  border-color: #FFCB33; 
+} 
+ 
+.btn-graphtitle:active, 
+.btn-graphtitle.active, 
+.open .dropdown-toggle.btn-graphtitle { 
+  background-image: none; 
+} 
+ 
+.btn-graphtitle.disabled, 
+.btn-graphtitle[disabled], 
+fieldset[disabled] .btn-graphtitle, 
+.btn-graphtitle.disabled:hover, 
+.btn-graphtitle[disabled]:hover, 
+fieldset[disabled] .btn-graphtitle:hover, 
+.btn-graphtitle.disabled:focus, 
+.btn-graphtitle[disabled]:focus, 
+fieldset[disabled] .btn-graphtitle:focus, 
+.btn-graphtitle.disabled:active, 
+.btn-graphtitle[disabled]:active, 
+fieldset[disabled] .btn-graphtitle:active, 
+.btn-graphtitle.disabled.active, 
+.btn-graphtitle[disabled].active, 
+fieldset[disabled] .btn-graphtitle.active { 
+  background-color: #FFBE00; 
+  border-color: #FFCB33; 
+} 
+ 
+.btn-graphtitle .badge { 
+  color: #FFBE00; 
+  background-color: #000000; 
+}
