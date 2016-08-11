@@ -42,7 +42,6 @@ function maketrialselection(divid, idid){
 
 window.onbeforeunload = function() {
     sessionStorage.setItem('dataname', $('#dataselect-formcontrol').val());
-    console.log('got here')
 }
 
 
@@ -69,7 +68,7 @@ function makenoderadios(divid, idid){
         
         $( divid ).append(inputsnd);
 
-        document.getElementById("node1" + idid).checked = true
+        document.getElementById("node1" + idid).checked = true;
     });
 
 }

@@ -32,7 +32,7 @@ body{
 }
 
 
-#histholder, #tsholder, #bpndholder, #bpclsholder, #pdfholder {
+#histholder, #tsholder, #bpndholder, #bpclsholder, #pdfholder, #tsqlholder {
     height: 400px;
     width: 48.7%;
     float: left;
@@ -52,14 +52,14 @@ body{
 }
 
 @media (max-width: 1000px) {
-    #histholder, #tsholder, #bpndholder, #bpclsholder, #pdfholder {
+    #histholder, #tsholder, #bpndholder, #bpclsholder, #pdfholder, #tsqlholder {
         width: 100%;
         float: left;
         margin: 30px 5px 30px 5px;
     }
 }
 
-#timeseries, #histogram, #boxplotsnd, #boxplotscls, #pdf {
+#timeseries, #histogram, #boxplotsnd, #boxplotscls, #pdf, #timeseriesql {
     float: left;
     height: 400px;
     width: 100%;
