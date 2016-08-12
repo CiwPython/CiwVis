@@ -48,27 +48,23 @@ window.onbeforeunload = function() {
 
 function refresh_page(){
     window.onload = function() {
-      update_hist();
-      update_ts();
-      update_bpnd();
-      update_bpcls();
-      update_pdf();
-    };
-}
-
-
+        update_hist();
+        update_ts();
+        update_bpnd();
+        update_bpcls();
+        update_pdf();
+        update_tsql();
+      }}
 
 function makenoderadios(divid, idid){
     var datasource = document.getElementById('dataselect-formcontrol').value;
     d3.json(datasource + '/metadata.json', function(data) { meta = data;
         var inputsnd = 'Node:<br>'
         for (i = 1; i <= meta.Number_of_nodes; i++){
-            inputsnd += '<label class="radio-inline"><input type="radio" onchange="update_' + idid + '()" name="Nodepdf" id="node' + i + idid + '"/>' + i + '</label>'
+            inputsnd += '<label class="radio-inline"><input type="radio" onchange="update_' + idid + '()" name="Node' + idid + '" id="node' + i + idid + '"/>' + i + '</label>'
         };
         
         $( divid ).append(inputsnd);
 
         document.getElementById("node1" + idid).checked = true;
-    });
-
-}
+    })}
