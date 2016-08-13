@@ -7,8 +7,6 @@ var margin = {top: 50, bottom: 50, left: 70, right: 50};
 var width = view_width - margin.left - margin.right;
 var height = view_height - margin.top - margin.bottom;
 
-var x_scale = d3.scaleLinear()
-    .range([0, width]);
 var y_scale = d3.scaleLinear()
     .range([height, 0]);
 
@@ -70,11 +68,13 @@ function update_pdf() {
     if (trialon.checked){ mydata = mydataintermediate.filter(function(d) { return d.Trial == trialnumber; });};
 
     var maxValue = d3.max(mydata, function(d){ return d.State; });
+    
+    var barWidth = (width / mydata.length)*0.7;
 
-
-    var x_scale = d3.scaleLinear()
+    var x_scale = d3.scaleBand()
+        .domain(mydata.map(function(d) { return d.State; }))
         .range([0, width])
-    	.domain([0, maxValue]);
+        .padding(0.2);
 
     var y_scale = d3.scaleLinear()
         .domain([0, d3.max(mydata, function(d) { return d.Probability; })])
@@ -99,9 +99,9 @@ function update_pdf() {
 
     newbar.merge(bar)
         .append("rect")
-        .attr("x", function(d) { return x_scale(d.State-0.2); })
+        .attr("x", function(d) { return x_scale(d.State); })
         .attr("fill", "#ff6600")
-        .attr("width", x_scale(0.4))
+        .attr("width", barWidth)
         .attr("height", function(d) { return height - y_scale(d.Probability); })
         .attr("y", function(d) { return y_scale(d.Probability); })
         .on("mouseover", function(d) {
