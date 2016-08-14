@@ -52,6 +52,7 @@ function update_pdf() {
     var trialnumber = parseInt(d3.select('#trial_pdf').node().value);
     var allon = document.getElementById('all_pdf');
     var trialon = document.getElementById('trialon_pdf');
+    var cumulative = document.getElementById('pdfcum');
 
     for (i=1; i<=meta.Number_of_nodes; i++){
         if (document.getElementById('node' + i + 'pdf').checked) { var node = i; }
@@ -68,20 +69,32 @@ function update_pdf() {
     if (trialon.checked){ mydata = mydataintermediate.filter(function(d) { return d.Trial == trialnumber; });};
 
     var maxValue = d3.max(mydata, function(d){ return d.State; });
-    
+
+    var halfbar = (width / mydata.length)*0.5;
     var barWidth = (width / mydata.length)*0.7;
 
     var x_scale = d3.scaleBand()
         .domain(mydata.map(function(d) { return d.State; }))
-        .range([0, width])
-        .padding(0.2);
+        .range([0, width]);
 
     var y_scale = d3.scaleLinear()
         .domain([0, d3.max(mydata, function(d) { return d.Probability; })])
         .range([height, 0]);
 
+    var valueline = d3.line()
+        .x(function(d) { return x_scale(d.State) + halfbar; })
+        .y(function(d) { return y_scale(d.Probability); });
+
     svg_pdf.selectAll(".bar")
         .remove();
+    svg_pdf.selectAll(".dot")
+        .remove();
+    svg_pdf.selectAll(".line")
+        .remove();
+
+    if (cumulative.checked){
+        y_scale.domain([0, 1.05])
+    };
 
     var bar = svg_pdf.selectAll(".bar")
         .data(mydata);
@@ -99,7 +112,7 @@ function update_pdf() {
 
     newbar.merge(bar)
         .append("rect")
-        .attr("x", function(d) { return x_scale(d.State); })
+        .attr("x", function(d) { return x_scale(d.State) + 0.3*halfbar; })
         .attr("fill", "#ff6600")
         .attr("width", barWidth)
         .attr("height", function(d) { return height - y_scale(d.Probability); })
@@ -153,6 +166,82 @@ function update_pdf() {
             svg_pdf.select("#tooltip").remove();
         });
 
+
+    if (cumulative.checked){
+        var cumdata = cumulativedata(mydata, maxValue)
+        svg_pdf.append('path')
+            .datum(cumdata)
+            .attr("class", "line")
+            .attr("fill", "none")
+            .attr("stroke", "#ff9900")
+            .attr("stroke-width", 2)
+            .style("stroke-dasharray", ("3, 3"))
+            .attr('d', valueline);
+        svg_pdf.selectAll('.dot')
+            .data(cumdata)
+            .enter()
+            .append('circle')
+            .attr("class", "dot")
+            .attr("stroke", "#ff9900")
+            .attr("fill", "#FFD18B")
+            .attr("r", Math.max(0.15*barWidth, width/200))
+            .attr("cx", function(d) {return x_scale(d.State) + halfbar;})
+            .attr("cy", function(d) {return y_scale(d.Probability);})
+            .on("mouseover", function(d) {
+                d3.select(this)
+                    .attr('fill', '#ff6600');
+                var tooltip = svg_pdf
+                    .append('g')
+                    .attr('id', 'tooltipline');
+                tooltip
+                    .append("line")
+                    .attr('class', 'line')
+                    .attr('id', 'vline')
+                    .attr("fill", "none")
+                    .attr("stroke", "#B7B7B7")
+                    .attr("stroke-width", 0.8)
+                    .style("stroke-dasharray", ("2, 2"))
+                    .attr("x1", x_scale(d.State) + halfbar)
+                    .attr("x2", x_scale(d.State) + halfbar)
+                    .attr("y1", y_scale(0))
+                    .attr("y2", y_scale(d.Probability));
+                tooltip
+                    .append("line")
+                    .attr('class', 'line')
+                    .attr('id', 'vline')
+                    .attr("fill", "none")
+                    .attr("stroke", "#B7B7B7")
+                    .attr("stroke-width", 0.8)
+                    .style("stroke-dasharray", ("2, 2"))
+                    .attr("x1", x_scale(d.State) + halfbar)
+                    .attr("x2", 0)
+                    .attr("y1", y_scale(d.Probability))
+                    .attr("y2", y_scale(d.Probability));
+                tooltip
+                    .append("rect")
+                    .attr('x', x_scale(d.State) + halfbar - 70)
+                    .attr('width', 140)
+                    .attr('y', y_scale(d.Probability) - 40)
+                    .attr('height', 28)
+                    .attr('fill', '#FFF3D1')
+                    .attr('stroke', '#ff9900')
+                    .attr('rx', 10)
+                    .attr('ry', 10);
+                tooltip
+                    .append('text')
+                    .attr('x', x_scale(d.State) + halfbar - 60)
+                    .attr('y', y_scale(d.Probability) - 20)
+                    .text('P(q ≤ ' + d.State + ') = ' + d.Probability.toFixed(5));
+            })
+            .on("mouseout", function(d) {
+                d3.select(this)
+                    .attr('fill', '#FFD18B');
+                svg_pdf.select('#tooltipline')
+                    .remove();
+            });
+    };
+
+
     svg_pdf.selectAll(".axis")
         .remove()
     svg_pdf.append("g")
@@ -169,3 +258,15 @@ function update_pdf() {
     });
 }
 
+
+
+function cumulativedata(data, maxValue) {
+    var cum_data = [];
+    var cum = 0;
+    for (i=0; i<=maxValue; i++){
+        cum += data[i].Probability
+        point = {"State":i, "Probability":cum}
+        cum_data.push(point)
+    };
+    return cum_data
+}

@@ -122,6 +122,7 @@
             Type:
             <label class="radio-inline"><input onclick="document.getElementById('trial_pdf').disabled = true; update_pdf()" type="radio" name="pdftype", id="all_pdf" checked="checked">All</label>
             <label class="radio-inline"><input onclick="document.getElementById('trial_pdf').disabled = false; update_pdf()" type="radio" name="pdftype", id="trialon_pdf">Trial</label><br>
+            <label class="checkbox-inline"><input onchange="update_pdf()" type="checkbox" name="pdfcum" id="pdfcum">Cumulative</label><br>
             <script>maketrialselection('#pdfoptions', 'pdf')</script>
         </div>
         <script>makenoderadios("#pdfoptions" , "pdf");</script>
