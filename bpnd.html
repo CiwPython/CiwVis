@@ -1,0 +1,16 @@
+<div id="plotoptions">
+    <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#bpnd_options" aria-expanded="false" aria-controls="bxpltnd_options" style="clear: both;">
+      <h4><span class="glyphicon glyphicon-cog"></span></span> Waits Boxplots - Nodes</h4>
+      </a>
+    <div class="collapse" id="bpnd_options">
+        <br>
+        Warm Up Time: <input type="text" class="form-control" value="0" onchange="update_bpnd()" name="warmup" id="warmupboxnd"><br>
+        Type:
+        <label class="radio-inline"><input onclick="document.getElementById('trial_bpnd').disabled = true; update_bpnd()" type="radio" name="bpndtype", id="all_bpnd" checked="checked">All</label>
+        <label class="radio-inline"><input onclick="document.getElementById('trial_bpnd').disabled = true; update_bpnd()" type="radio" name="bpndtype", id="means_bpnd">Means</label>
+        <label class="radio-inline"><input onclick="document.getElementById('trial_bpnd').disabled = false; update_bpnd()" type="radio" name="bpndtype", id="trialon_bpnd">Trial</label><br>
+        <script>maketrialselection('#bpnd_options', 'bpnd')</script>
+    </div>
+    <script>makecheckboxes(false, true, "#bpnd_options" , "bpnd");</script>
+</div>
+<div id="boxplotsnd"></div><script src="js/boxplotsnd.js"></script>

@@ -19,7 +19,7 @@ header{
 }
 
 #datasourcebutton {
-    width: 20%;
+    width: 10%;
     float:right;
 }
 
@@ -82,6 +82,9 @@ input[type=range]{
 #dataselect-formcontrol-group {
     margin: 0px 0px 0px 0px;
 }
+
+
+
 
 
 

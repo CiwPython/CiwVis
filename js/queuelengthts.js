@@ -52,12 +52,14 @@ function update_tsql() {
     /*
         Update function reads the input values, creates random data, and updates the visualisation accordingly
     */
-    var datasource = document.getElementById('dataselect-formcontrol').value;
+    var num_nodes = parseInt(sessionStorage.getItem('Number_of_nodes'))
+    var num_classes = parseInt(sessionStorage.getItem('Number_of_classes'))
+    var num_trials = parseInt(sessionStorage.getItem('Number_of_trials'))
+    var weeksstr = sessionStorage.getItem('Weeks')
+    var weeks = weeksstr.split(",").map(Number)
 
-    d3.json(datasource + '/metadata.json', function(metadata) {
-        meta = metadata;
 
-    for (i=1; i<=meta.Number_of_nodes; i++){
+    for (i=1; i<=num_nodes; i++){
         if (document.getElementById('node' + i + 'tsql').checked) { var node = i; }
     };
 
@@ -66,8 +68,6 @@ function update_tsql() {
     var means = document.getElementById('means_tsql');
     var conf_on = document.getElementById('confidenceinterval_tsql');
     var conf = document.getElementById('confidence_tsql').value;
-
-    var filename = datasource + '/time_series_data_ql.json'
     
     var valueline = d3.line()
         .x(function(d) { return x_scale(d.Week); })
@@ -79,8 +79,11 @@ function update_tsql() {
         .y1(function(d) { return y_scale(d.UpperConf); });
 
 
-    d3.json(filename, function(data) {
-        mydataraw = data;
+    var tsqldatafile = choosefile('time_series_data_ql.json')
+    const tsqlfileReader = new FileReader();
+    tsqlfileReader.onload = event => {
+        const contentsOfFile = event.target.result;
+        var mydataraw = JSON.parse(contentsOfFile);
     
     mydata = mydataraw.filter(function(d) { return d.Node == node; });
     x_scale.domain([0, d3.max(mydata, function(d){ return d.Week; })]);
@@ -89,8 +92,8 @@ function update_tsql() {
     svg_tsql.selectAll("path").remove();
 
     if (conf_on.checked){
-        var meandata = findmeandata_ql(mydata, meta);
-        var confdata = confidenceinterval_ql(mydata, meandata, conf, meta)
+        var meandata = findmeandata_ql(mydata, weeks);
+        var confdata = confidenceinterval_ql(mydata, meandata, conf, weeks, num_trials)
         svg_tsql.append("path")
           .datum(confdata)
           .attr("class", "area")
@@ -100,7 +103,7 @@ function update_tsql() {
     };
 
     if (raw.checked) {
-        for (t=0; t<meta.Number_of_trials; t++){
+        for (t=0; t<num_trials; t++){
             thisdata = mydata.filter(function (d) {return d.Trial == t;});
             svg_tsql.append('path')
                 .datum(thisdata)
@@ -154,7 +157,7 @@ function update_tsql() {
 
 
     if (means.checked) {
-        var meandata = findmeandata_ql(mydata, meta);
+        var meandata = findmeandata_ql(mydata, weeks);
         svg_tsql.append('path')
             .datum(meandata)
             .attr("class", "line")
@@ -175,48 +178,52 @@ function update_tsql() {
         .transition(t)
         .call(d3.axisLeft(y_scale).ticks(10));
 
-    });
-    });
+
     }
+    tsqlfileReader.readAsText(tsqldatafile);
+
+}
 
 
 
-function findmeandata_ql(data, meta){
+function findmeandata_ql(data, weeks){
     var meandata = [];
-    for (w in meta.Weeks) {
-        var weekdata = data.filter(function (d) {return d.Week == meta.Weeks[w];})
+    for (w in weeks) {
+        var weekdata = data.filter(function (d) {return d.Week == weeks[w];})
         var value = d3.mean(weekdata.map(function(d) {return d.Length; }));
-        var point = {'Week':meta.Weeks[w], 'Length':value}
+        var point = {'Week':weeks[w], 'Length':value}
         meandata.push(point)
     };
     return meandata
 }
 
-function confidenceinterval_ql(data, meandata, conf, meta){
+function confidenceinterval_ql(data, meandata, conf, weeks, num_trials){
     confdata = []
-    if (meta.Number_of_trials < 100) {
+    if (num_trials < 100) {
         var z = jStat.normal.inv(conf, 0, 1)
-        for (w in meta.Weeks){
-            var xbar = meandata.filter(function(d) {return d.Week == meta.Weeks[w]})[0]['Length']
-            var weekdata = data.filter(function(d) {return d.Week == meta.Weeks[w]}).map(function(d) {return d.Length;})
+        for (w in weeks){
+            var xbar = meandata.filter(function(d) {return d.Week == weeks[w]})[0]['Length']
+            var weekdata = data.filter(function(d) {return d.Week == weeks[w]}).map(function(d) {return d.Length;})
             var sigma = jStat.stdev(weekdata)
-            var lowerconf = xbar - z*(sigma/Math.sqrt(meta.Number_of_trials))
-            var upperconf = xbar + z*(sigma/Math.sqrt(meta.Number_of_trials))
-            var point = {'Week':meta.Weeks[w], 'UpperConf':upperconf, 'LowerConf':lowerconf}
+            var lowerconf = xbar - z*(sigma/Math.sqrt(num_trials))
+            var upperconf = xbar + z*(sigma/Math.sqrt(num_trials))
+            var point = {'Week':weeks[w], 'UpperConf':upperconf, 'LowerConf':lowerconf}
             confdata.push(point)
         };
     } else {
-        var z = jStat.studentt.inv(conf, meta.Number_of_trials - 1)
-        for (w in meta.Weeks){
-            var xbar = meandata.filter(function(d) {return d.Week == meta.Weeks[w]})[0]['Length']
-            var weekdata = data.filter(function(d) {return d.Week == meta.Weeks[w]}).map(function(d) {return d.Length;})
+        var z = jStat.studentt.inv(conf, num_trials - 1)
+        for (w in weeks){
+            var xbar = meandata.filter(function(d) {return d.Week == weeks[w]})[0]['Length']
+            var weekdata = data.filter(function(d) {return d.Week == weeks[w]}).map(function(d) {return d.Length;})
             var sigma = jStat.stdev(weekdata)
-            var lowerconf = xbar - z*(sigma/Math.sqrt(meta.Number_of_trials))
-            var upperconf = xbar + z*(sigma/Math.sqrt(meta.Number_of_trials))
-            var point = {'Week':meta.Weeks[w], 'UpperConf':upperconf, 'LowerConf':lowerconf}
+            var lowerconf = xbar - z*(sigma/Math.sqrt(num_trials))
+            var upperconf = xbar + z*(sigma/Math.sqrt(num_trials))
+            var point = {'Week':weeks[w], 'UpperConf':upperconf, 'LowerConf':lowerconf}
             confdata.push(point)
         };
     }
     return confdata
 }
 
+
+update_tsql()

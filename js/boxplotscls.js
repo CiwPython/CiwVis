@@ -54,25 +54,26 @@ function update_bpcls() {
     /*
         Update function reads the input values, creates random data, and updates the visualisation accordingly
     */
-    var datasource = document.getElementById('dataselect-formcontrol').value;
-
-    d3.json(datasource + '/metadata.json', function(metadata) {
-        meta = metadata;
+    var num_nodes = parseInt(sessionStorage.getItem('Number_of_nodes'))
+    var num_classes = parseInt(sessionStorage.getItem('Number_of_classes'))
+    var num_trials = parseInt(sessionStorage.getItem('Number_of_trials'))
 
     var warmup = parseInt(d3.select('#warmupboxcls').node().value);
     var validNodes = {}
-    var numclasses = meta.Number_of_classes
     var trialnumber = parseInt(d3.select('#trial_bpcls').node().value);
     var allon = document.getElementById('all_bpcls');
     var meanson = document.getElementById('means_bpcls');
     var trialon = document.getElementById('trialon_bpcls');
 
-    for (i=1; i<=meta.Number_of_nodes; i++){
+    for (i=1; i<=num_nodes; i++){
         if (document.getElementById('node' + i + 'bpcls').checked) { validNodes[i] = true }
     };
 
-    d3.json(datasource + '/waitingdata.json', function(data) {
-        mydataraw = data;
+    var bpclsdatafile = choosefile('waitingdata.json')
+    const bpclsfileReader = new FileReader();
+    bpclsfileReader.onload = event => {
+        const contentsOfFile = event.target.result;
+        var mydataraw = JSON.parse(contentsOfFile);
 
         var mydataintermediate = mydataraw.filter(function (d) {
             return d.Node in validNodes &&
@@ -84,10 +85,10 @@ function update_bpcls() {
 
         var xaxis_ticks = [];
         var bpdata = []
-        for (cls = 0; cls < numclasses; cls++) {
+        for (cls = 0; cls < num_classes; cls++) {
             var dta_raw = mydata.filter(function(d) {return d.Customer_class == cls;});
             if (meanson.checked){
-                dta = meanwait_bp(dta_raw, meta);
+                dta = meanwait_bp(dta_raw, num_trials);
             } else {
                 dta = dta_raw.map(function(d) {return d.Waiting_time});
             };
@@ -95,7 +96,7 @@ function update_bpcls() {
             xaxis_ticks.push((((cls+1)*1.8) - 0.9)*box_width)
         };
 
-        x_scale.domain([0, 1.8*box_width*numclasses]);
+        x_scale.domain([0, 1.8*box_width*num_classes]);
         y_scale.domain([0, d3.max(bpdata, function(d){ return d.tailmax; })]);
         
         svg_bxpltcls.selectAll(".box").remove();
@@ -275,9 +276,9 @@ function update_bpcls() {
                 .tickFormat(function(d) {return ((d+9)/18)-1;}));
 
 
-            });
-            });
-        }
+    }
+    bpclsfileReader.readAsText(bpclsdatafile);
+}
 
 
 function boxplotdata_cls(data, cls) {
@@ -297,11 +298,14 @@ function boxplotdata_cls(data, cls) {
     };
 
 
-function meanwait_bp(data, meta) {
+function meanwait_bp(data, num_trials) {
     var meanwaits = []
-    for (t=0; t<meta.Number_of_trials; t++){
+    for (t=0; t<num_trials; t++){
         var trialmean = jStat.mean(data.filter(function(d) { return d.Trial == t; }).map(function(d) { return d.Waiting_time; }))
         meanwaits.push(trialmean)
     };
     return meanwaits
 };
+
+
+update_bpcls()

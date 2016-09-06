@@ -1,0 +1,16 @@
+<div id="plotoptions">
+      <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#pdfoptions" aria-expanded="false" aria-controls="pdfoptions" style="clear: both;">
+      <h4><span class="glyphicon glyphicon-cog"></span></span> Probability Density Function</h4>
+      </a>
+    <div class="collapse" id="pdfoptions">
+        <br>
+        Warm Up Time: <input type="text" class="form-control" value="0" onchange="update_pdf()" name="warmup_pdf" id="warmup_pdf"><br>
+        Type:
+        <label class="radio-inline"><input onclick="document.getElementById('trial_pdf').disabled = true; update_pdf()" type="radio" name="pdftype", id="all_pdf" checked="checked">All</label>
+        <label class="radio-inline"><input onclick="document.getElementById('trial_pdf').disabled = false; update_pdf()" type="radio" name="pdftype", id="trialon_pdf">Trial</label><br>
+        <label class="checkbox-inline"><input onchange="update_pdf()" type="checkbox" name="pdfcum" id="pdfcum">Cumulative</label><br>
+        <script>maketrialselection('#pdfoptions', 'pdf')</script>
+    </div>
+    <script>makenoderadios("#pdfoptions" , "pdf");</script>
+</div>
+<div id="pdf"></div><script src="js/pdf.js"></script>

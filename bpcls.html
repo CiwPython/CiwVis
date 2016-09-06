@@ -1,0 +1,16 @@
+<div id="plotoptions">
+    <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#bpcls_options" aria-expanded="false" aria-controls="bxpltcls_options" style="clear: both;">
+      <h4><span class="glyphicon glyphicon-cog"></span></span> Waits Boxplots - Classes</h4>
+      </a>
+    <div class="collapse" id="bpcls_options">
+        <br>
+        Warm Up Time: <input type="text" class="form-control" value="0" onchange="update_bpcls()" name="warmup" id="warmupboxcls"><br>
+        Type:
+        <label class="radio-inline"><input onclick="document.getElementById('trial_bpcls').disabled = true; update_bpcls()" type="radio" name="bpclstype", id="all_bpcls" checked="checked">All</label>
+        <label class="radio-inline"><input onclick="document.getElementById('trial_bpcls').disabled = true; update_bpcls()" type="radio" name="bpclstype", id="means_bpcls">Means</label>
+        <label class="radio-inline"><input onclick="document.getElementById('trial_bpcls').disabled = false; update_bpcls()" type="radio" name="bpclstype", id="trialon_bpcls">Trial</label><br>
+        <script>maketrialselection('#bpcls_options', 'bpcls')</script>
+    </div>
+    <script>makecheckboxes(true, false, "#bpcls_options" , "bpcls");</script>
+</div>
+<div id="boxplotscls"></div><script src="js/boxplotscls.js"></script>

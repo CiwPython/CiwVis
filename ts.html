@@ -1,0 +1,15 @@
+<div id="plotoptions">
+    <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#tsoptions" aria-expanded="false" aria-controls="tsoptions" style="clear: both;">
+      <h4><span class="glyphicon glyphicon-cog"></span></span> Time Series - Waits</h4>
+      </a>
+    <div class="collapse" id="tsoptions">
+        <br>
+        Type:<br>
+        <label class="checkbox-inline"><input type="checkbox" onchange="update_ts()" name="Raw_ts" id="raw_ts"/>Raw</label>
+        <label class="checkbox-inline"><input type="checkbox" checked="checked" onchange="update_ts()" name="Means_ts" id="means_ts"/>Means</label>
+        <label class="checkbox-inline"><input type="checkbox" checked="checked" onchange="update_ts()" name="ConfidenceInterval_ts" id="confidenceinterval_ts"/>C.I.</label><br>
+        Confidence: <input type="text" class="form-control" value="0.95" name="confidence" onchange="update_ts()" id="confidence"><br>
+    </div>
+    <script>makecheckboxes(true, true, "#tsoptions" , "ts");</script>
+</div>
+<div id="timeseries"></div><script src="js/timeseries.js"></script>

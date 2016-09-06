@@ -1,0 +1,15 @@
+<div id="plotoptions">
+    <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#tsqloptions" aria-expanded="false" aria-controls="tsqloptions" style="clear: both;">
+      <h4><span class="glyphicon glyphicon-cog"></span></span> Time Series - Queue Length</h4>
+      </a>
+    <div class="collapse" id="tsqloptions">
+        <br>
+        Type:<br>
+        <label class="checkbox-inline"><input type="checkbox" onchange="update_tsql()" name="Raw_tsql" id="raw_tsql"/>Raw</label>
+        <label class="checkbox-inline"><input type="checkbox" checked="checked" onchange="update_tsql()" name="Means_tsql" id="means_tsql"/>Means</label>
+        <label class="checkbox-inline"><input type="checkbox" checked="checked" onchange="update_tsql()" name="ConfidenceInterval_tsql" id="confidenceinterval_tsql"/>C.I.</label><br>
+        Confidence: <input type="text" class="form-control" value="0.95" name="confidence" onchange="update_tsql()" id="confidence_tsql"><br>
+    </div>
+    <script>makenoderadios("#tsqloptions" , "tsql");</script>
+</div>
+<div id="timeseriesql"></div><script src="js/queuelengthts.js"></script>

@@ -23,163 +23,41 @@
 </head>
 <header>
     <div id="minititle">CiwVis 0.0.1</div>
-    <div id="datasourcebutton">
-        <div class="input-group" id="dataselect-formcontrol-group">
-            <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-wrench"></span> Data source: </span></span>
-            <input type="text" id="dataselect-formcontrol" class="form-control" value="sampledata1" onchange="window.location.reload(true);" aria-describedby="basic-addon1">
-            <script>
-                var dataname = sessionStorage.getItem('dataname');
-                if (dataname !== null) $('#dataselect-formcontrol').val(dataname);
-            </script>
+        <div class="btn-group" id="datasourcebutton">
+            <button id='clearbutton' class="btn btn-primary" onclick="window.location.reload()">&nbsp;<span class="glyphicon glyphicon-remove-sign"></span>&nbsp;</button>
+            <label class="btn btn-primary" id="filechooser">
+                &nbsp;<span class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                <input type="file" style="display: none;" multiple directory webkitdirectory id="fileInput" onchange="refresh_page(); this.disabled=true; document.getElementById('filechooser').disabled=true;">
+            </label>
         </div>
-    </div>
 </header>
 <h1>CiwVis</h1>
 <body>
 
 
-
-
 <div id="histholder">
-    <div id="plotoptions">
-          <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#histoptions" aria-expanded="false" aria-controls="histoptions" style="clear: both;">
-          <h4><span class="glyphicon glyphicon-cog"></span></span> Histogram</h4>
-          </a>
-        <div class="collapse" id="histoptions">
-            <br>
-            Number of Bins:
-            <input type="text" class="form-control" value="15" name="numbins" onchange="update_hist()" id="numbins"><br>
-            Warm Up Time: <input type="text" class="form-control" value="0" onchange="update_hist()" name="warmup" id="warmup"><br>
-            Type:
-            <label class="radio-inline"><input onclick="document.getElementById('trial_hist').disabled = true; update_hist()" type="radio" name="histtype", id="all_hist" checked="checked">All</label>
-            <label class="radio-inline"><input onclick="document.getElementById('trial_hist').disabled = true; update_hist()" type="radio" name="histtype", id="means_hist">Means</label>
-            <label class="radio-inline"><input onclick="document.getElementById('trial_hist').disabled = false; update_hist()" type="radio" name="histtype", id="trialon_hist">Trial</label><br>
-            <script>maketrialselection('#histoptions', 'hist')</script>
-        </div>
-        <script>makecheckboxes(true, true, "#histoptions" , "hist");</script>
-    </div>
-    <div id="histogram"></div><script src="js/histogram.js"></script>
 </div>
-
-
-
-
-
 
 
 <div id="tsholder">
-    <div id="plotoptions">
-        <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#tsoptions" aria-expanded="false" aria-controls="tsoptions" style="clear: both;">
-          <h4><span class="glyphicon glyphicon-cog"></span></span> Time Series - Waits</h4>
-          </a>
-        <div class="collapse" id="tsoptions">
-            <br>
-            Type:<br>
-            <label class="checkbox-inline"><input type="checkbox" onchange="update_ts()" name="Raw_ts" id="raw_ts"/>Raw</label>
-            <label class="checkbox-inline"><input type="checkbox" checked="checked" onchange="update_ts()" name="Means_ts" id="means_ts"/>Means</label>
-            <label class="checkbox-inline"><input type="checkbox" checked="checked" onchange="update_ts()" name="ConfidenceInterval_ts" id="confidenceinterval_ts"/>C.I.</label><br>
-            Confidence: <input type="text" class="form-control" value="0.95" name="confidence" onchange="update_ts()" id="confidence"><br>
-        </div>
-        <script>makecheckboxes(true, true, "#tsoptions" , "ts");</script>
-    </div>
-    <div id="timeseries"></div><script src="js/timeseries.js"></script>
 </div>
-
-
-
 
 
 <div id="tsqlholder">
-    <div id="plotoptions">
-        <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#tsqloptions" aria-expanded="false" aria-controls="tsqloptions" style="clear: both;">
-          <h4><span class="glyphicon glyphicon-cog"></span></span> Time Series - Queue Length</h4>
-          </a>
-        <div class="collapse" id="tsqloptions">
-            <br>
-            Type:<br>
-            <label class="checkbox-inline"><input type="checkbox" onchange="update_tsql()" name="Raw_tsql" id="raw_tsql"/>Raw</label>
-            <label class="checkbox-inline"><input type="checkbox" checked="checked" onchange="update_tsql()" name="Means_tsql" id="means_tsql"/>Means</label>
-            <label class="checkbox-inline"><input type="checkbox" checked="checked" onchange="update_tsql()" name="ConfidenceInterval_tsql" id="confidenceinterval_tsql"/>C.I.</label><br>
-            Confidence: <input type="text" class="form-control" value="0.95" name="confidence" onchange="update_tsql()" id="confidence_tsql"><br>
-        </div>
-        <script>makenoderadios("#tsqloptions" , "tsql");</script>
-    </div>
-    <div id="timeseriesql"></div><script src="js/queuelengthts.js"></script>
 </div>
-
-
-
 
 
 <div id="pdfholder">
-    <div id="plotoptions">
-          <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#pdfoptions" aria-expanded="false" aria-controls="pdfoptions" style="clear: both;">
-          <h4><span class="glyphicon glyphicon-cog"></span></span> Probability Density Function</h4>
-          </a>
-        <div class="collapse" id="pdfoptions">
-            <br>
-            Warm Up Time: <input type="text" class="form-control" value="0" onchange="update_pdf()" name="warmup_pdf" id="warmup_pdf"><br>
-            Type:
-            <label class="radio-inline"><input onclick="document.getElementById('trial_pdf').disabled = true; update_pdf()" type="radio" name="pdftype", id="all_pdf" checked="checked">All</label>
-            <label class="radio-inline"><input onclick="document.getElementById('trial_pdf').disabled = false; update_pdf()" type="radio" name="pdftype", id="trialon_pdf">Trial</label><br>
-            <label class="checkbox-inline"><input onchange="update_pdf()" type="checkbox" name="pdfcum" id="pdfcum">Cumulative</label><br>
-            <script>maketrialselection('#pdfoptions', 'pdf')</script>
-        </div>
-        <script>makenoderadios("#pdfoptions" , "pdf");</script>
-    </div>
-    <div id="pdf"></div><script src="js/pdf.js"></script>
 </div>
-
-
-
-
-
 
 
 <div id="bpndholder">
-    <div id="plotoptions">
-        <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#bpnd_options" aria-expanded="false" aria-controls="bxpltnd_options" style="clear: both;">
-          <h4><span class="glyphicon glyphicon-cog"></span></span> Waits Boxplots - Nodes</h4>
-          </a>
-        <div class="collapse" id="bpnd_options">
-            <br>
-            Warm Up Time: <input type="text" class="form-control" value="0" onchange="update_bpnd()" name="warmup" id="warmupboxnd"><br>
-            Type:
-            <label class="radio-inline"><input onclick="document.getElementById('trial_bpnd').disabled = true; update_bpnd()" type="radio" name="bpndtype", id="all_bpnd" checked="checked">All</label>
-            <label class="radio-inline"><input onclick="document.getElementById('trial_bpnd').disabled = true; update_bpnd()" type="radio" name="bpndtype", id="means_bpnd">Means</label>
-            <label class="radio-inline"><input onclick="document.getElementById('trial_bpnd').disabled = false; update_bpnd()" type="radio" name="bpndtype", id="trialon_bpnd">Trial</label><br>
-            <script>maketrialselection('#bpnd_options', 'bpnd')</script>
-        </div>
-        <script>makecheckboxes(false, true, "#bpnd_options" , "bpnd");</script>
-    </div>
-    <div id="boxplotsnd"></div><script src="js/boxplotsnd.js"></script>
 </div>
-
-
-
-
 
 
 <div id="bpclsholder">
-    <div id="plotoptions">
-        <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#bpcls_options" aria-expanded="false" aria-controls="bxpltcls_options" style="clear: both;">
-          <h4><span class="glyphicon glyphicon-cog"></span></span> Waits Boxplots - Classes</h4>
-          </a>
-        <div class="collapse" id="bpcls_options">
-            <br>
-            Warm Up Time: <input type="text" class="form-control" value="0" onchange="update_bpcls()" name="warmup" id="warmupboxcls"><br>
-            Type:
-            <label class="radio-inline"><input onclick="document.getElementById('trial_bpcls').disabled = true; update_bpcls()" type="radio" name="bpclstype", id="all_bpcls" checked="checked">All</label>
-            <label class="radio-inline"><input onclick="document.getElementById('trial_bpcls').disabled = true; update_bpcls()" type="radio" name="bpclstype", id="means_bpcls">Means</label>
-            <label class="radio-inline"><input onclick="document.getElementById('trial_bpcls').disabled = false; update_bpcls()" type="radio" name="bpclstype", id="trialon_bpcls">Trial</label><br>
-            <script>maketrialselection('#bpcls_options', 'bpcls')</script>
-        </div>
-        <script>makecheckboxes(true, false, "#bpcls_options" , "bpcls");</script>
-    </div>
-    <div id="boxplotscls"></div><script src="js/boxplotscls.js"></script>
 </div>
 </body>
 
-<script>refresh_page()</script>
 
 </html>

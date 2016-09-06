@@ -43,10 +43,7 @@ function update_pdf() {
     var t = d3.transition()
         .duration(2000);
 
-    var datasource = document.getElementById('dataselect-formcontrol').value;
-
-    d3.json(datasource + '/metadata.json', function(metadata) {
-        meta = metadata;
+    var num_nodes = parseInt(sessionStorage.getItem('Number_of_nodes'))
 
     var warmup = parseInt(d3.select('#warmup_pdf').node().value);
     var trialnumber = parseInt(d3.select('#trial_pdf').node().value);
@@ -54,12 +51,15 @@ function update_pdf() {
     var trialon = document.getElementById('trialon_pdf');
     var cumulative = document.getElementById('pdfcum');
 
-    for (i=1; i<=meta.Number_of_nodes; i++){
+    for (i=1; i<=num_nodes; i++){
         if (document.getElementById('node' + i + 'pdf').checked) { var node = i; }
     };
 
-    d3.json(datasource + '/pdf.json', function(data) {
-        mydataraw = data;
+    var pdfdatafile = choosefile('pdf.json')
+    const pdffileReader = new FileReader();
+    pdffileReader.onload = event => {
+        const contentsOfFile = event.target.result;
+        var mydataraw = JSON.parse(contentsOfFile);
 
     var mydataintermediate = mydataraw.filter(function (d) {
       return d.Node == node;
@@ -254,8 +254,8 @@ function update_pdf() {
 
 
 
-    });
-    });
+    }
+    pdffileReader.readAsText(pdfdatafile);
 }
 
 
@@ -270,3 +270,6 @@ function cumulativedata(data, maxValue) {
     };
     return cum_data
 }
+
+
+update_pdf()

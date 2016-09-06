@@ -1,0 +1,18 @@
+<div id="plotoptions">
+      <a class="btn btn-graphtitle btn-block bt-lg" data-toggle="collapse" href="#histoptions" aria-expanded="false" aria-controls="histoptions" style="clear: both;">
+      <h4><span class="glyphicon glyphicon-cog"></span></span> Histogram</h4>
+      </a>
+    <div class="collapse" id="histoptions">
+        <br>
+        Number of Bins:
+        <input type="text" class="form-control" value="15" name="numbins" onchange="update_hist()" id="numbins"><br>
+        Warm Up Time: <input type="text" class="form-control" value="0" onchange="update_hist()" name="warmup" id="warmup"><br>
+        Type:
+        <label class="radio-inline"><input onclick="document.getElementById('trial_hist').disabled = true; update_hist()" type="radio" name="histtype", id="all_hist" checked="checked">All</label>
+        <label class="radio-inline"><input onclick="document.getElementById('trial_hist').disabled = true; update_hist()" type="radio" name="histtype", id="means_hist">Means</label>
+        <label class="radio-inline"><input onclick="document.getElementById('trial_hist').disabled = false; update_hist()" type="radio" name="histtype", id="trialon_hist">Trial</label><br>
+        <script>maketrialselection('#histoptions', 'hist')</script>
+    </div>
+    <script>makecheckboxes(true, true, "#histoptions" , "hist");</script>
+</div>
+<div id="histogram"></div><script src="js/histogram.js"></script>

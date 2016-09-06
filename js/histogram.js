@@ -45,10 +45,9 @@ function update_hist() {
     var t = d3.transition()
         .duration(2000);
 
-    var datasource = document.getElementById('dataselect-formcontrol').value;
-
-    d3.json(datasource + '/metadata.json', function(metadata) {
-        meta = metadata;
+    var num_nodes = parseInt(sessionStorage.getItem('Number_of_nodes'))
+    var num_classes = parseInt(sessionStorage.getItem('Number_of_classes'))
+    var num_trials = parseInt(sessionStorage.getItem('Number_of_trials'))
 
     var numberofbins = parseInt(d3.select('#numbins').node().value);
     var warmup = parseInt(d3.select('#warmup').node().value);
@@ -60,15 +59,18 @@ function update_hist() {
     var validNodes = {}
     var validClasses = {}
 
-    for (i=1; i<=meta.Number_of_nodes; i++){
+    for (i=1; i<=num_nodes; i++){
         if (document.getElementById('node' + i + 'hist').checked) { validNodes[i] = true }
     };
-    for (i=0; i<meta.Number_of_classes; i++){
+    for (i=0; i<num_classes; i++){
         if (document.getElementById('class' + i + 'hist').checked) { validClasses[i] = true }
     };
 
-    d3.json(datasource + '/waitingdata.json', function(data) {
-        mydataraw = data;
+    var histdatafile = choosefile('waitingdata.json')
+    const histfileReader = new FileReader();
+    histfileReader.onload = event => {
+        const contentsOfFile = event.target.result;
+        var mydataraw = JSON.parse(contentsOfFile);
 
     var mydataintermediate = mydataraw.filter(function (d) {
       return d.Node in validNodes &&
@@ -77,7 +79,7 @@ function update_hist() {
     });
 
     if (allon.checked){ mydata = mydataintermediate;};
-    if (meanson.checked){ mydata = meanwait(mydataintermediate, meta);};
+    if (meanson.checked){ mydata = meanwait(mydataintermediate, num_trials);};
     if (trialon.checked){ mydata = mydataintermediate.filter(function(d) { return d.Trial == trialnumber; });};
 
     var maxValue = d3.max(mydata, function(d){ return d.Waiting_time; });
@@ -186,17 +188,21 @@ function update_hist() {
 
 
 
-    });
-    });
+    }
+    histfileReader.readAsText(histdatafile);
 }
 
 
-function meanwait(data, meta) {
+function meanwait(data, num_trials) {
     var meanwaits = []
-    for (t=0; t<meta.Number_of_trials; t++){
+    for (t=0; t<num_trials; t++){
         var trialmean = jStat.mean(data.filter(function(d) { return d.Trial == t; }).map(function(d) { return d.Waiting_time; }))
         var point = {'Waiting_time': trialmean}
         meanwaits.push(point)
     };
     return meanwaits
 };
+
+
+
+update_hist()
