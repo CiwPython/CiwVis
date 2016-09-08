@@ -24,9 +24,9 @@
 <header>
     <div id="minititle">CiwVis 0.0.1</div>
         <div class="btn-group" id="datasourcebutton">
-            <button id='clearbutton' class="btn btn-primary" onclick="window.location.reload()">&nbsp;<span class="glyphicon glyphicon-remove-sign"></span>&nbsp;</button>
-            <label class="btn btn-primary" id="filechooser">
-                &nbsp;<span class="glyphicon glyphicon-folder-open"></span>&nbsp;
+            <button id='clearbutton' class="btn btn-topbar" onclick="window.location.reload()">&nbsp;<span class="glyphicon glyphicon-remove-sign"></span>&nbsp; Clear</button>
+            <label class="btn btn-topbar" id="filechooser">
+                &nbsp;<span class="glyphicon glyphicon-folder-open"></span>&nbsp; Browse...
                 <input type="file" style="display: none;" multiple directory webkitdirectory id="fileInput" onchange="refresh_page(); this.disabled=true; document.getElementById('filechooser').disabled=true;">
             </label>
         </div>

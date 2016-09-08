@@ -19,7 +19,7 @@ header{
 }
 
 #datasourcebutton {
-    width: 10%;
+    width: 195px;
     float:right;
 }
 
@@ -134,6 +134,63 @@ fieldset[disabled] .btn-graphtitle.active {
 } 
  
 .btn-graphtitle .badge { 
+  color: #FFBE00; 
+  background-color: #000000; 
+}
+
+
+
+
+
+
+
+
+
+
+/*Custom button for top bar*/
+
+.btn-topbar { 
+  color: #FFFFFF; 
+  background-color: #33C3CC; 
+  border-color: #118C94; 
+} 
+ 
+.btn-topbar:hover, 
+.btn-topbar:focus, 
+.btn-topbar:active, 
+.btn-topbar.active, 
+.open .dropdown-toggle.btn-topbar { 
+  color: #FFFFFF; 
+  background-color: #8BDDE2; 
+  border-color: #6DD4DB; 
+} 
+ 
+.btn-topbar:active, 
+.btn-topbar.active, 
+.open .dropdown-toggle.btn-topbar { 
+  background-image: none; 
+} 
+ 
+.btn-topbar.disabled, 
+.btn-topbar[disabled], 
+fieldset[disabled] .btn-topbar, 
+.btn-topbar.disabled:hover, 
+.btn-topbar[disabled]:hover, 
+fieldset[disabled] .btn-topbar:hover, 
+.btn-topbar.disabled:focus, 
+.btn-topbar[disabled]:focus, 
+fieldset[disabled] .btn-topbar:focus, 
+.btn-topbar.disabled:active, 
+.btn-topbar[disabled]:active, 
+fieldset[disabled] .btn-topbar:active, 
+.btn-topbar.disabled.active, 
+.btn-topbar[disabled].active, 
+fieldset[disabled] .btn-topbar.active { 
+  background-color: #FFBE00; 
+  border-color: #FFCB33; 
+} 
+ 
+.btn-topbar .badge { 
   color: #FFBE00; 
   background-color: #000000; 
 }
